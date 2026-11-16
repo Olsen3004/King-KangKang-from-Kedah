@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 760" width="1160" height="760" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif">
+  <rect width="1160" height="760" fill="#FAF7F0" />
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#57534E" />
+    </marker>
+    <marker id="arrow-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#B45309" />
+    </marker>
+  </defs>
+
+  <!-- Title & Academic Legend -->
+  <text x="36" y="40" font-family="'Fraunces', Georgia, serif" font-size="22" font-weight="600" fill="#1C1917">
+    Semantic Network: Wau Kangkang (Kedah Traditional Heritage Kite)
+  </text>
+  <text x="36" y="61" font-size="12" fill="#57534E">
+    Knowledge Representation Diagram — Origin, Cultural Significance, Anatomy, Bamboo Craft &amp; Acoustics (20 Nodes · 21 Relations)
+  </text>
+
+  <!-- Legend -->
+  <g transform="translate(36, 732)" font-size="11" fill="#44403C">
+    <rect x="0" y="-12" width="14" height="14" rx="3" fill="#115E59" />
+    <text x="20" y="-1">Core Concept</text>
+
+    <rect x="125" y="-12" width="14" height="14" rx="3" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5" />
+    <text x="145" y="-1">Origin &amp; Culture</text>
+
+    <rect x="265" y="-12" width="14" height="14" rx="3" fill="#ECFDF5" stroke="#047857" stroke-width="1.5" />
+    <text x="285" y="-1">Anatomy &amp; Flight</text>
+
+    <rect x="415" y="-12" width="14" height="14" rx="3" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5" />
+    <text x="435" y="-1">Craft, Sobek &amp; Busur</text>
+
+    <text x="720" y="-1" fill="#78716C">Arrows read: Subject —[relation]→ Object</text>
+  </g>
+
+  <!-- EDGES -->
+  <g stroke="#78716C" stroke-width="1.5" fill="none">
+    <!-- Core (580,360) -> Malay Kite (580,92) -->
+    <line x1="580" y1="336" x2="580" y2="117" marker-end="url(#arrow-gold)" stroke="#B45309" />
+    <!-- Core (580,360) -> Kedah (175,130) -->
+    <line x1="504" y1="336" x2="215" y2="154" marker-end="url(#arrow)" />
+    <!-- Kedah (175,130) -> Bendang (120,265) -->
+    <line x1="164" y1="152" x2="128" y2="240" marker-end="url(#arrow)" />
+    <!-- Core (580,360) -> Siblings (385,175) -->
+    <line x1="546" y1="336" x2="412" y2="199" marker-end="url(#arrow)" />
+    <!-- Core (580,360) -> Harvest (970,130) -->
+    <line x1="656" y1="336" x2="932" y2="154" marker-end="url(#arrow)" />
+    <!-- Harvest (970,130) -> Angin Timur (1035,260) -->
+    <line x1="984" y1="152" x2="1026" y2="236" marker-end="url(#arrow)" />
+    <!-- Core (580,360) -> Symbolizes (775,175) -->
+    <line x1="614" y1="336" x2="748" y2="199" marker-end="url(#arrow)" />
+    <!-- Core (580,360) -> Kangkang Stance (215,365) -->
+    <line x1="494" y1="362" x2="326" y2="365" marker-end="url(#arrow-gold)" stroke="#B45309" />
+    <!-- Kangkang Stance (215,365) -> Yaw Stability (105,455) -->
+    <line x1="184" y1="388" x2="128" y2="432" marker-end="url(#arrow)" />
+    <!-- Core (580,360) -> Upper Wings & Spine (285,515) -->
+    <line x1="528" y1="384" x2="330" y2="492" marker-end="url(#arrow)" />
+    <!-- Upper Wings & Spine (285,515) -> Teraju (115,665) -->
+    <line x1="255" y1="538" x2="140" y2="641" marker-end="url(#arrow)" />
+    <!-- Teraju (115,665) -> Pitch Balance (365,670) -->
+    <line x1="190" y1="667" x2="270" y2="669" marker-end="url(#arrow)" />
+    <!-- Core (580,360) -> Bamboo (585,520) -->
+    <line x1="581" y1="384" x2="584" y2="496" marker-end="url(#arrow-gold)" stroke="#B45309" />
+    <!-- Bamboo (585,520) -> Upper Wings & Spine (285,515) -->
+    <line x1="478" y1="518" x2="394" y2="516" marker-end="url(#arrow)" />
+    <!-- Bamboo (585,520) -> Curing (585,670) -->
+    <line x1="585" y1="542" x2="585" y2="646" marker-end="url(#arrow)" />
+    <!-- Bamboo (585,520) -> Tools (805,670) -->
+    <line x1="628" y1="542" x2="770" y2="646" marker-end="url(#arrow)" />
+    <!-- Core (580,360) -> Sobek (845,520) -->
+    <line x1="624" y1="384" x2="806" y2="496" marker-end="url(#arrow)" />
+    <!-- Sobek (845,520) -> Kertas Wau (1025,665) -->
+    <line x1="876" y1="542" x2="994" y2="641" marker-end="url(#arrow)" />
+    <!-- Core (580,360) -> Busur (925,365) -->
+    <line x1="668" y1="362" x2="830" y2="364" marker-end="url(#arrow-gold)" stroke="#B45309" />
+    <!-- Busur (925,365) -> Daun Ibus (1035,460) -->
+    <line x1="958" y1="388" x2="1010" y2="436" marker-end="url(#arrow)" />
+    <!-- Kedah (175,130) -> Harvest (970,130) curved high arc above Malay Kite? Let's route cleanly at y=130? Wait Malay Kite is at y=92, so route via y=102? No, Kedah(175,130) -> Harvest(970,130) passes through y=130 which is BELOW Malay Kite (69..113)! -->
+    <line x1="274" y1="130" x2="858" y2="130" marker-end="url(#arrow)" stroke-dasharray="5 4" />
+  </g>
+
+  <!-- EDGE LABELS -->
+  <g font-family="'IBM Plex Mono', monospace" font-size="10.5" text-anchor="middle">
+    <g transform="translate(580, 238)"><rect x="-24" y="-9" width="48" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#92400E">is_a</text></g>
+    <g transform="translate(362, 254)"><rect x="-54" y="-9" width="108" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">originates_from</text></g>
+    <g transform="translate(145, 198)"><rect x="-46" y="-9" width="92" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">features_open</text></g>
+    <g transform="translate(480, 268)"><rect x="-50" y="-9" width="100" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">contrasts_with</text></g>
+    <g transform="translate(794, 254)"><rect x="-60" y="-9" width="120" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">celebrated_during</text></g>
+    <g transform="translate(1006, 196)"><rect x="-46" y="-9" width="92" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">brings_steady</text></g>
+    <g transform="translate(684, 268)"><rect x="-38" y="-9" width="76" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">symbolizes</text></g>
+    <g transform="translate(410, 364)"><rect x="-42" y="-9" width="84" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#92400E">named_after</text></g>
+    <g transform="translate(154, 412)"><rect x="-32" y="-9" width="64" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">provides</text></g>
+    <g transform="translate(432, 438)"><rect x="-42" y="-9" width="84" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">consists_of</text></g>
+    <g transform="translate(198, 592)"><rect x="-42" y="-9" width="84" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">rigged_with</text></g>
+    <g transform="translate(230, 668)"><rect x="-32" y="-9" width="64" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">controls</text></g>
+    <g transform="translate(583, 442)"><rect x="-46" y="-9" width="92" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#92400E">crafted_from</text></g>
+    <g transform="translate(436, 517)"><rect x="-40" y="-9" width="80" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">shaped_into</text></g>
+    <g transform="translate(585, 596)"><rect x="-32" y="-9" width="64" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">cured_by</text></g>
+    <g transform="translate(702, 596)"><rect x="-40" y="-9" width="80" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">worked_with</text></g>
+    <g transform="translate(722, 442)"><rect x="-50" y="-9" width="100" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">decorated_with</text></g>
+    <g transform="translate(938, 594)"><rect x="-48" y="-9" width="96" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">applied_using</text></g>
+    <g transform="translate(750, 363)"><rect x="-64" y="-9" width="128" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#92400E">produces_sound_via</text></g>
+    <g transform="translate(988, 412)"><rect x="-42" y="-9" width="84" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">strung_with</text></g>
+    <g transform="translate(692, 130)"><rect x="-32" y="-9" width="64" height="16" rx="4" fill="#FAF7F0" /><text y="3" fill="#57534E">sustains</text></g>
+  </g>
+
+  <!-- NODES -->
+  <!-- Core -->
+  <g transform="translate(580, 360)">
+    <rect x="-86" y="-23" width="172" height="46" rx="10" fill="#115E59" stroke="#0F4C48" stroke-width="2" />
+    <text text-anchor="middle" y="5" font-size="14" font-weight="700" fill="#FFFFFF">Wau Kangkang</text>
+  </g>
+
+  <!-- Origin & Culture -->
+  <g transform="translate(580, 92)">
+    <rect x="-96" y="-21" width="192" height="42" rx="8" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12.5" font-weight="600" fill="#1C1917">Traditional Malay Kite</text>
+  </g>
+
+  <g transform="translate(175, 130)">
+    <rect x="-96" y="-21" width="192" height="42" rx="8" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12.5" font-weight="600" fill="#1C1917">Kedah (Jelapang Padi)</text>
+  </g>
+
+  <g transform="translate(120, 265)">
+    <rect x="-96" y="-21" width="192" height="42" rx="8" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12.5" font-weight="600" fill="#1C1917">Paddy Fields (Bendang)</text>
+  </g>
+
+  <g transform="translate(385, 175)">
+    <rect x="-106" y="-21" width="212" height="42" rx="8" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Wau Seri Bulan &amp; Wau Bulan</text>
+  </g>
+
+  <g transform="translate(970, 130)">
+    <rect x="-108" y="-21" width="216" height="42" rx="8" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Post-Harvest (Musim Menuai)</text>
+  </g>
+
+  <g transform="translate(1035, 260)">
+    <rect x="-94" y="-21" width="188" height="42" rx="8" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Angin Timur Monsoon</text>
+  </g>
+
+  <g transform="translate(775, 175)">
+    <rect x="-106" y="-21" width="212" height="42" rx="8" fill="#FEF3C7" stroke="#B45309" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Gratitude &amp; Gotong-Royong</text>
+  </g>
+
+  <!-- Anatomy & Flight -->
+  <g transform="translate(215, 365)">
+    <rect x="-108" y="-21" width="216" height="42" rx="8" fill="#ECFDF5" stroke="#047857" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Splayed Legs (Terkangkang)</text>
+  </g>
+
+  <g transform="translate(105, 455)">
+    <rect x="-82" y="-21" width="164" height="42" rx="8" fill="#ECFDF5" stroke="#047857" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Yaw Flight Stability</text>
+  </g>
+
+  <g transform="translate(285, 515)">
+    <rect x="-106" y="-21" width="212" height="42" rx="8" fill="#ECFDF5" stroke="#047857" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Upper Wings (Sayap) &amp; Spine</text>
+  </g>
+
+  <g transform="translate(115, 665)">
+    <rect x="-72" y="-21" width="144" height="42" rx="8" fill="#ECFDF5" stroke="#047857" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Teraju Bridle</text>
+  </g>
+
+  <g transform="translate(365, 670)">
+    <rect x="-92" y="-21" width="184" height="42" rx="8" fill="#ECFDF5" stroke="#047857" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Pitch &amp; Wind Balance</text>
+  </g>
+
+  <!-- Craft, Sobek & Busur -->
+  <g transform="translate(585, 520)">
+    <rect x="-104" y="-21" width="208" height="42" rx="8" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Buluh Duri &amp; Buluh Betong</text>
+  </g>
+
+  <g transform="translate(585, 670)">
+    <rect x="-98" y="-21" width="196" height="42" rx="8" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Pond Soaking (Merendam)</text>
+  </g>
+
+  <g transform="translate(805, 670)">
+    <rect x="-98" y="-21" width="196" height="42" rx="8" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Pisau Raut &amp; Cotton Thread</text>
+  </g>
+
+  <g transform="translate(845, 520)">
+    <rect x="-92" y="-21" width="184" height="42" rx="8" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Sobek Floral Carving</text>
+  </g>
+
+  <g transform="translate(1030, 665)">
+    <rect x="-106" y="-21" width="212" height="42" rx="8" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Kertas Wau &amp; Tapioca Starch</text>
+  </g>
+
+  <g transform="translate(925, 365)">
+    <rect x="-92" y="-21" width="184" height="42" rx="8" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Busur Humming Bow</text>
+  </g>
+
+  <g transform="translate(1035, 460)">
+    <rect x="-88" y="-21" width="176" height="42" rx="8" fill="#FFF7ED" stroke="#C2410C" stroke-width="1.5" />
+    <text text-anchor="middle" y="4" font-size="12" font-weight="600" fill="#1C1917">Daun Ibus Palm Strip</text>
+  </g>
+</svg>

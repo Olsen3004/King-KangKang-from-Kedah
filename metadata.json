@@ -1,0 +1,8 @@
+{
+  "name": "King KangKang — Kedah Wau Kangkang Expert System",
+  "description": "An AI Expert System and conversational heritage chatbot named King KangKang, dedicated to Kedah's traditional Wau Kangkang kite, its cultural significance, semantic knowledge network, and bamboo kite-making craft.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

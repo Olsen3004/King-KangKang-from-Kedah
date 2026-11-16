@@ -5,6 +5,7 @@ import { AnatomyCraftView } from './components/AnatomyCraftView';
 import { FlightDoctorView } from './components/FlightDoctorView';
 import { NlpTraceView } from './components/NlpTraceView';
 import { StandaloneSemanticNetworkPage } from './components/StandaloneSemanticNetworkPage';
+import { WauMinigame } from './components/WauMinigame';
 import { SEMANTIC_NODES } from './expert/knowledgeBase';
 import { getTimeGreeting } from './expert/nlpProcessor';
 import {
@@ -52,6 +53,14 @@ export default function App() {
   const isStandaloneSemanticRoute =
     typeof window !== 'undefined' && window.location.pathname === '/semantic-network';
 
+  const initialSearchParams =
+    typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const autostartMinigame = initialSearchParams?.get('autostart') === '1';
+  const initialMinigameOpen =
+    typeof window !== 'undefined' &&
+    (window.location.pathname === '/minigame' || Boolean(initialSearchParams?.has('autostart')));
+
+  const [showMinigame, setShowMinigame] = useState<boolean>(initialMinigameOpen);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [awaitingName, setAwaitingName] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<StudioTab>('anatomy');
@@ -200,17 +209,35 @@ export default function App() {
     return <StandaloneSemanticNetworkPage />;
   }
 
+  if (showMinigame) {
+    return (
+      <WauMinigame
+        autostart={autostartMinigame}
+        onExitToAtelier={() => {
+          setShowMinigame(false);
+          if (
+            typeof window !== 'undefined' &&
+            (window.location.pathname === '/minigame' || window.location.search.includes('autostart'))
+          ) {
+            window.history.replaceState({}, '', '/');
+          }
+        }}
+      />
+    );
+  }
+
   return (
     <div id="top" className="min-h-screen bg-[#FAF7F0] text-[#1C1917]">
       <TopBar
         activeTab={activeTab}
         onSelectTab={handleSelectStudioTab}
+        onOpenMinigame={() => setShowMinigame(true)}
         onNewVisitor={handleNewVisitor}
       />
 
       <main className="mx-auto max-w-[1440px] px-4 py-5 sm:px-6 lg:px-8">
         {/* Mobile Pane Switcher */}
-        <div className="mb-4 flex gap-2 rounded-lg border border-[#E2D9C8] bg-[#F2ECE0] p-1 lg:hidden">
+        <div className="mb-4 flex gap-1.5 rounded-lg border border-[#E2D9C8] bg-[#F2ECE0] p-1 lg:hidden">
           <button
             type="button"
             onClick={() => setMobilePane('chat')}
@@ -232,6 +259,13 @@ export default function App() {
             }`}
           >
             Knowledge Studio
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowMinigame(true)}
+            className="flex-1 rounded-md py-2 text-xs font-semibold text-[#B45309] transition-colors hover:bg-white/60"
+          >
+            Minigame
           </button>
         </div>
 

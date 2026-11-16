@@ -3,6 +3,7 @@ import { StudioTab } from '../types/chat';
 interface TopBarProps {
   activeTab: StudioTab;
   onSelectTab: (tab: StudioTab) => void;
+  onOpenMinigame: () => void;
   onNewVisitor: () => void;
 }
 
@@ -12,7 +13,7 @@ const NAV_ITEMS: Array<{ id: StudioTab; label: string }> = [
   { id: 'nlp', label: 'NLP Trace' },
 ];
 
-export function TopBar({ activeTab, onSelectTab, onNewVisitor }: TopBarProps) {
+export function TopBar({ activeTab, onSelectTab, onOpenMinigame, onNewVisitor }: TopBarProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-[#E2D9C8] bg-[#FAF7F0]/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-8 px-4 py-3 sm:px-6 lg:px-8">
@@ -47,6 +48,14 @@ export function TopBar({ activeTab, onSelectTab, onNewVisitor }: TopBarProps) {
               </button>
             );
           })}
+
+          <button
+            type="button"
+            onClick={onOpenMinigame}
+            className="py-1 text-sm font-semibold text-[#B45309] transition-colors hover:text-[#92400E] whitespace-nowrap shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#115E59]"
+          >
+            Wau Minigame
+          </button>
         </nav>
 
         <div className="flex items-center shrink-0">

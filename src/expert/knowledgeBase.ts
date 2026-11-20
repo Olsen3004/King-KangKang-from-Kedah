@@ -224,8 +224,8 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
     material: 'Tapered Buluh Duri spine tip wrapped in gold/crimson kertas wau.',
     craftDetail: 'Shaved slightly thinner than the waist so it flexes smoothly in sudden gusts.',
     nodeId: 'sayap_frame',
-    cx: 200,
-    cy: 42,
+    cx: 50.5,
+    cy: 10,
   },
   {
     id: 'busur',
@@ -235,8 +235,8 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
     material: 'Curved bamboo bow strung with cured daun ibus (palm frond strip).',
     craftDetail: 'Mounted at the neck; scraped along its centre edge to tune pitch.',
     nodeId: 'busur_bow',
-    cx: 200,
-    cy: 82,
+    cx: 36,
+    cy: 20,
   },
   {
     id: 'sayap',
@@ -246,8 +246,8 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
     material: 'Matched twin arches of Buluh Betong or Buluh Minyak.',
     craftDetail: 'Both sides are whittled and flexed together until weight is identical.',
     nodeId: 'buluh_duri',
-    cx: 108,
-    cy: 138,
+    cx: 18,
+    cy: 35,
   },
   {
     id: 'pinggang',
@@ -257,8 +257,8 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
     material: 'Seasoned Buluh Duri spine lashed with waxed cotton thread.',
     craftDetail: 'Balanced on a fingertip at the centre knot before any paper is glued.',
     nodeId: 'teraju_bridle',
-    cx: 200,
-    cy: 184,
+    cx: 50.5,
+    cy: 48,
   },
   {
     id: 'sobek',
@@ -268,8 +268,8 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
     material: 'Symmetrical cut kertas wau glued with cooked tapioca starch paste.',
     craftDetail: 'Features Awan Larat and Bunga Ketumbit motifs carved with a pisau ukir.',
     nodeId: 'sobek_motifs',
-    cx: 286,
-    cy: 140,
+    cx: 72,
+    cy: 32,
   },
   {
     id: 'kaki',
@@ -279,8 +279,8 @@ export const ANATOMY_PARTS: AnatomyPart[] = [
     material: 'Twin curved bamboo ribs flaring outward below the waist.',
     craftDetail: 'Must mirror evenly in span and curve so the kite tracks straight without swinging.',
     nodeId: 'kangkang_stance',
-    cx: 256,
-    cy: 266,
+    cx: 60.5,
+    cy: 79,
   },
 ];
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MessageSquare } from 'lucide-react';
 import { ANATOMY_PARTS, CRAFT_STAGES } from '../expert/knowledgeBase';
+import WAU_REAL_IMAGE from '../assets/images/wau_kangkang_real.jpg';
 
 const WORKSHOP_IMAGE = '/src/assets/images/wau_craft_workshop_1794768857147.jpg';
 
@@ -10,6 +11,7 @@ interface AnatomyCraftViewProps {
 
 export function AnatomyCraftView({ onAskAboutPart }: AnatomyCraftViewProps) {
   const [selectedPartId, setSelectedPartId] = useState<string>(ANATOMY_PARTS[5].id); // Default highlight Kaki Terkangkang
+  const [anatomyImgFailed, setAnatomyImgFailed] = useState(false);
   const [workshopImgFailed, setWorkshopImgFailed] = useState(false);
 
   const selectedPart =
@@ -26,106 +28,52 @@ export function AnatomyCraftView({ onAskAboutPart }: AnatomyCraftViewProps) {
         </p>
       </div>
 
-      {/* Interactive Blueprint SVG */}
+      {/* Interactive Real Wau Kangkang Anatomy Photo */}
       <div className="grid grid-cols-1 gap-4 rounded-xl border border-[#E2D9C8] bg-[#FAF7F0] p-4 sm:grid-cols-2">
-        <div className="flex items-center justify-center rounded-lg border border-[#E2D9C8] bg-white p-2">
-          <svg
-            viewBox="0 0 400 320"
-            className="h-auto w-full max-w-[300px]"
-            role="img"
-            aria-label="Interactive anatomical blueprint of a traditional Kedah Wau Kangkang kite"
+        <div className="flex flex-col items-center justify-center rounded-lg border border-[#E2D9C8] bg-white p-3">
+          <div
+            className="relative mx-auto w-full max-w-[320px] aspect-[469/482]"
+            data-testid="wau-anatomy-diagram"
           >
-            {/* Busur Humming Bow */}
-            <path
-              d="M 110 92 Q 200 66 290 92"
-              fill="none"
-              stroke="#B45309"
-              strokeWidth="3.5"
-              strokeLinecap="round"
-            />
-            <line
-              x1="112"
-              y1="92"
-              x2="288"
-              y2="92"
-              stroke="#78716C"
-              strokeWidth="1.25"
-              strokeDasharray="3 2"
-            />
-
-            {/* Main Upper Wings + Narrow Waist + Distinctive Splayed Twin Kangkang Legs */}
-            <path
-              d="M 200 36
-                 L 216 96
-                 C 278 90, 354 114, 358 140
-                 C 356 168, 276 184, 214 184
-                 C 214 210, 250 242, 286 286
-                 C 246 274, 218 248, 200 222
-                 C 182 248, 154 274, 114 286
-                 C 150 242, 186 210, 186 184
-                 C 124 184, 44 168, 42 140
-                 C 46 114, 122 90, 184 96
-                 Z"
-              fill="#F3EBDD"
-              stroke="#115E59"
-              strokeWidth="2.5"
-              strokeLinejoin="round"
-            />
-
-            {/* Sobek Floral Rosette */}
-            <circle cx="200" cy="142" r="24" fill="#115E59" fillOpacity="0.14" stroke="#B45309" strokeWidth="1.5" />
-            <circle cx="122" cy="140" r="14" fill="#B45309" fillOpacity="0.16" stroke="#B45309" strokeWidth="1.2" />
-            <circle cx="278" cy="140" r="14" fill="#B45309" fillOpacity="0.16" stroke="#B45309" strokeWidth="1.2" />
-
-            {/* Central Tulang Belakang Spine */}
-            <line
-              x1="200"
-              y1="36"
-              x2="200"
-              y2="225"
-              stroke="#78350F"
-              strokeWidth="2.5"
-            />
+            {!anatomyImgFailed ? (
+              <img
+                src={WAU_REAL_IMAGE}
+                alt="Interactive anatomical photograph of a traditional Malaysian Wau Kangkang kite"
+                referrerPolicy="no-referrer"
+                onError={() => setAnatomyImgFailed(true)}
+                className="h-full w-full select-none object-contain"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center rounded-lg border border-dashed border-[#D6CEBE] bg-[#FAF7F0] p-4 text-center text-xs text-[#57534E]">
+                Traditional Wau Kangkang Reference Image
+              </div>
+            )}
 
             {/* Clickable Anatomy Hotspots */}
             {ANATOMY_PARTS.map((part, index) => {
               const isSelected = part.id === selectedPart.id;
               return (
-                <g
+                <button
                   key={part.id}
-                  role="button"
-                  tabIndex={0}
+                  type="button"
                   aria-label={`Select anatomy part ${part.name}`}
+                  aria-pressed={isSelected}
                   onClick={() => setSelectedPartId(part.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setSelectedPartId(part.id);
-                    }
-                  }}
-                  className="cursor-pointer focus:outline-none"
+                  style={{ left: `${part.cx}%`, top: `${part.cy}%` }}
+                  className={`absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full font-mono text-[11px] font-bold shadow-md transition-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#115E59] ${
+                    isSelected
+                      ? 'z-20 h-7 w-7 scale-110 border-2 border-[#FEF3C7] bg-[#115E59] text-white ring-2 ring-[#115E59]/30'
+                      : 'z-10 h-6 w-6 border-2 border-[#B45309] bg-[#FAF7F0]/95 text-[#1C1917] hover:scale-110 hover:bg-white'
+                  }`}
                 >
-                  <circle
-                    cx={part.cx}
-                    cy={part.cy}
-                    r={isSelected ? 14 : 11}
-                    fill={isSelected ? '#115E59' : '#FFFFFF'}
-                    stroke={isSelected ? '#0F4C48' : '#B45309'}
-                    strokeWidth="2"
-                  />
-                  <text
-                    x={part.cx}
-                    y={part.cy + 4}
-                    textAnchor="middle"
-                    fill={isSelected ? '#FFFFFF' : '#1C1917'}
-                    className="font-mono text-[10px] font-semibold"
-                  >
-                    {index + 1}
-                  </text>
-                </g>
+                  {index + 1}
+                </button>
               );
             })}
-          </svg>
+          </div>
+          <p className="mt-2 font-mono text-[10px] tracking-wide text-[#78716C]">
+            Traditional Wau Kangkang · Tap markers 1–6 to inspect
+          </p>
         </div>
 
         {/* Selected Part Specification */}

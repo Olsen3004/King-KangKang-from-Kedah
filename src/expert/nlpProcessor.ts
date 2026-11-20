@@ -28,6 +28,8 @@ export interface SynonymMatch {
   matchedTerm: string;
 }
 
+export type FollowUpReference = 'former' | 'latter' | 'both' | 'elaborate' | null;
+
 export interface NlpAnalysisResult {
   rawInput: string;
   normalizedText: string;
@@ -40,6 +42,7 @@ export interface NlpAnalysisResult {
   detectedIntent: IntentType;
   questionType: QuestionType;
   extractedName: string | null;
+  followUpRef: FollowUpReference;
   confidence: number;
 }
 
@@ -94,6 +97,8 @@ const NON_NAME_WORDS = new Set([
   'thank', 'bye', 'goodbye', 'what', 'why', 'how', 'where', 'when', 'who',
   'wau', 'kangkang', 'kedah', 'kite', 'kites', 'help', 'skip', 'none',
   'nothing', 'unknown', 'anonymous', 'test', 'testing', 'abc', 'asdf',
+  'former', 'latter', 'first', 'second', 'both', 'either', 'neither',
+  'more', 'elaborate', 'continue', 'option', 'one',
 ]);
 
 // Build flat domain vocabulary from synonym clusters + key Malay/English craft terms
@@ -157,6 +162,9 @@ const COMMON_ENGLISH_GUARD = new Set([
   'house', 'water', 'friend', 'school', 'class', 'teacher', 'student', 'assignment',
   'world', 'country', 'state', 'place', 'thing', 'person', 'people', 'color',
   'sound', 'shape', 'video', 'photo', 'image', 'write', 'speak', 'think',
+  'former', 'latter', 'first', 'second', 'option', 'choice', 'either', 'neither',
+  'mentioned', 'earlier', 'previous', 'continue', 'elaborate', 'detail', 'details',
+  'explain', 'both', 'more', 'number',
 ]);
 
 export function correctSpelling(token: string, vocabulary: string[] = DOMAIN_VOCABULARY): SpellingCorrection | null {
@@ -292,6 +300,44 @@ function detectQuestionType(normalizedText: string): QuestionType {
   return 'statement';
 }
 
+export function detectFollowUpReference(normalizedText: string): FollowUpReference {
+  const text = normalizedText.trim().toLowerCase();
+  if (!text) return null;
+
+  if (
+    /\b(the\s+former|former|first\s+one|the\s+first|1st(\s+one)?|option\s*(1|one)|number\s*(1|one)|initial\s+one|first\s+option|first\s+topic|first\s+part)\b/.test(
+      text,
+    ) ||
+    text === 'first'
+  ) {
+    return 'former';
+  }
+
+  if (
+    /\b(the\s+latter|latter|second\s+one|the\s+second|2nd(\s+one)?|option\s*(2|two)|number\s*(2|two)|last\s+one|second\s+option|second\s+topic|second\s+part)\b/.test(
+      text,
+    ) ||
+    text === 'second'
+  ) {
+    return 'latter';
+  }
+
+  if (/^(both|both of them|all of them|either|either one|tell me both|explain both)$/i.test(text) || /\bboth of (those|them)\b/.test(text)) {
+    return 'both';
+  }
+
+  if (
+    /^(tell me more|more|elaborate|continue|go on|keep going|explain more|what else|anything else|more details|details please|yes|sure|please do|yes please)$/i.test(
+      text,
+    ) ||
+    /\b(tell me more about (that|it)|explain (that|it) more|go deeper)\b/.test(text)
+  ) {
+    return 'elaborate';
+  }
+
+  return null;
+}
+
 export function processQuery(rawInput: string, awaitingName = false): NlpAnalysisResult {
   const validation = validateUserInput(rawInput);
   if (!validation.isValid) {
@@ -307,6 +353,7 @@ export function processQuery(rawInput: string, awaitingName = false): NlpAnalysi
       detectedIntent: 'off_topic',
       questionType: 'statement',
       extractedName: null,
+      followUpRef: null,
       confidence: 0,
     };
   }
@@ -356,6 +403,7 @@ export function processQuery(rawInput: string, awaitingName = false): NlpAnalysi
   }
 
   const questionType = detectQuestionType(correctedText);
+  const followUpRef = detectFollowUpReference(correctedText);
 
   // Step 4: Intent classification with rule priority
   let detectedIntent: IntentType = 'off_topic';
@@ -418,6 +466,7 @@ export function processQuery(rawInput: string, awaitingName = false): NlpAnalysi
     detectedIntent,
     questionType,
     extractedName,
+    followUpRef,
     confidence,
   };
 }

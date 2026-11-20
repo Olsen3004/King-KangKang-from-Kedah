@@ -86,6 +86,7 @@ async function startServer() {
         historyBlock ? `Recent Conversation:\n${historyBlock}` : '',
         `Baseline Expert Draft:\n${deterministicReply}`,
         `User's Latest Message: "${body.userMessage || ''}"`,
+        'If the user message is a short contextual reference (e.g., "the former", "the first one", "the latter", "both", or "tell me more"), resolve what they referred to in Recent Conversation and explain that Kedah Wau Kangkang topic thoroughly using the Baseline Expert Draft and Verified Semantic Network Facts.',
         'Respond as King KangKang in natural, engaging prose incorporating the verified facts above.',
       ]
         .filter(Boolean)

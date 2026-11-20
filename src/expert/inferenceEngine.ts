@@ -5,10 +5,17 @@ import {
   SEMANTIC_NODES,
 } from './knowledgeBase';
 import {
+  FollowUpReference,
   getTimeGreeting,
+  IntentType,
   NlpAnalysisResult,
   processQuery,
 } from './nlpProcessor';
+
+export interface LastBotContext {
+  ruleFired?: string;
+  text?: string;
+}
 
 export interface InferenceResult {
   replyText: string;
@@ -74,11 +81,146 @@ function diagnoseFromText(normalizedText: string): DiagnosticRule {
   return bestRule;
 }
 
+function extractChoiceClauses(botText?: string): { firstClause: string | null; secondClause: string | null } {
+  if (!botText) return { firstClause: null, secondClause: null };
+  const sentences = botText
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const candidateSentence =
+    [...sentences].reverse().find((s) => /\bor\b/i.test(s) && s.includes('?')) ??
+    [...sentences].reverse().find((s) => /\bor\b/i.test(s));
+
+  if (!candidateSentence) return { firstClause: null, secondClause: null };
+
+  const match = candidateSentence.match(/^(?:.*?[—:-]\s*)?(.+?),?\s+\bor\b\s+(.+?)\??$/i);
+  if (!match) return { firstClause: null, secondClause: null };
+
+  return {
+    firstClause: match[1].trim(),
+    secondClause: match[2].trim(),
+  };
+}
+
+const RULE_FOLLOWUP_MAP: Record<
+  string,
+  { former: IntentType; latter: IntentType; elaborate: IntentType }
+> = {
+  RULE_INITIAL_TIME_GREETING: {
+    former: 'origin_culture',
+    latter: 'busur_acoustics',
+    elaborate: 'origin_culture',
+  },
+  RULE_RETURNING_VISITOR_GREETING: {
+    former: 'origin_culture',
+    latter: 'craft_bamboo',
+    elaborate: 'origin_culture',
+  },
+  RULE_NAME_REGISTRATION: {
+    former: 'origin_culture',
+    latter: 'craft_bamboo',
+    elaborate: 'origin_culture',
+  },
+  RULE_GREETING_RESPONSE: {
+    former: 'origin_culture',
+    latter: 'craft_bamboo',
+    elaborate: 'origin_culture',
+  },
+  RULE_IDENTITY_INTRODUCTION: {
+    former: 'origin_culture',
+    latter: 'craft_bamboo',
+    elaborate: 'origin_culture',
+  },
+  RULE_SEMANTIC_NAME_SILHOUETTE: {
+    former: 'wau_comparison',
+    latter: 'craft_bamboo',
+    elaborate: 'wau_comparison',
+  },
+  RULE_SEMANTIC_ORIGIN_CULTURE: {
+    former: 'craft_bamboo',
+    latter: 'busur_acoustics',
+    elaborate: 'name_silhouette',
+  },
+  RULE_SEMANTIC_BAMBOO_CRAFT: {
+    former: 'sobek_decoration',
+    latter: 'anatomy_overview',
+    elaborate: 'sobek_decoration',
+  },
+  RULE_SEMANTIC_SOBEK_ART: {
+    former: 'sobek_decoration',
+    latter: 'craft_bamboo',
+    elaborate: 'busur_acoustics',
+  },
+  RULE_SEMANTIC_BUSUR_ACOUSTICS: {
+    former: 'flight_diagnosis',
+    latter: 'anatomy_overview',
+    elaborate: 'anatomy_overview',
+  },
+  RULE_SEMANTIC_REGIONAL_COMPARISON: {
+    former: 'wau_comparison',
+    latter: 'name_silhouette',
+    elaborate: 'origin_culture',
+  },
+  RULE_SEMANTIC_ANATOMY_BLUEPRINT: {
+    former: 'anatomy_overview',
+    latter: 'craft_bamboo',
+    elaborate: 'craft_bamboo',
+  },
+};
+
+function resolveFollowUpIntent(
+  followUpRef: FollowUpReference,
+  lastBotContext?: LastBotContext,
+): { resolvedIntent: IntentType; combinedIntroChoice?: 'former' | 'latter' | 'both' } {
+  const rule = lastBotContext?.ruleFired ?? '';
+  if (rule === 'RULE_NAME_REGISTRATION') {
+    if (followUpRef === 'former') {
+      return { resolvedIntent: 'origin_culture', combinedIntroChoice: 'former' };
+    }
+    if (followUpRef === 'latter') {
+      return { resolvedIntent: 'craft_bamboo', combinedIntroChoice: 'latter' };
+    }
+    if (followUpRef === 'both') {
+      return { resolvedIntent: 'origin_culture', combinedIntroChoice: 'both' };
+    }
+  }
+
+  const { firstClause, secondClause } = extractChoiceClauses(lastBotContext?.text);
+  const chosenClause =
+    followUpRef === 'former'
+      ? firstClause
+      : followUpRef === 'latter'
+        ? secondClause
+        : followUpRef === 'both'
+          ? [firstClause, secondClause].filter(Boolean).join(' ')
+          : null;
+
+  if (chosenClause) {
+    const clauseAnalysis = processQuery(chosenClause, false);
+    if (clauseAnalysis.detectedIntent !== 'off_topic') {
+      return { resolvedIntent: clauseAnalysis.detectedIntent };
+    }
+  }
+
+  const mapped = RULE_FOLLOWUP_MAP[rule];
+  if (mapped) {
+    if (followUpRef === 'former') return { resolvedIntent: mapped.former };
+    if (followUpRef === 'latter') return { resolvedIntent: mapped.latter };
+    return { resolvedIntent: mapped.elaborate };
+  }
+
+  // Safe Kedah Wau Kangkang default if follow-up reference arrives without stored context
+  return {
+    resolvedIntent: followUpRef === 'latter' ? 'craft_bamboo' : 'origin_culture',
+  };
+}
+
 export function runExpertInference(
   rawInput: string,
   currentUserName: string | null,
   awaitingName: boolean,
   now: Date = new Date(),
+  lastBotContext?: LastBotContext,
 ): InferenceResult {
   const analysis = processQuery(rawInput, awaitingName);
   const resolvedName = analysis.extractedName ?? currentUserName;
@@ -99,8 +241,24 @@ export function runExpertInference(
     };
   }
 
+  // Resolve contextual anaphora ("the former", "the first one", "the latter", "both", "tell me more")
+  let effectiveIntent: IntentType = analysis.detectedIntent;
+  let combinedIntroChoice: 'former' | 'latter' | 'both' | undefined;
+
+  if (effectiveIntent === 'off_topic' && analysis.followUpRef) {
+    const resolved = resolveFollowUpIntent(analysis.followUpRef, lastBotContext);
+    effectiveIntent = resolved.resolvedIntent;
+    combinedIntroChoice = resolved.combinedIntroChoice;
+    analysis.detectedIntent = effectiveIntent;
+    analysis.confidence = Math.max(analysis.confidence, 0.86);
+    analysis.matchedSynonyms.push({
+      concept: `context:${analysis.followUpRef}`,
+      matchedTerm: analysis.normalizedText,
+    });
+  }
+
   // Handle explicit name introduction
-  if (analysis.detectedIntent === 'name_intro' && analysis.extractedName) {
+  if (effectiveIntent === 'name_intro' && analysis.extractedName) {
     const timeGreeting = getTimeGreeting(now);
     return {
       replyText: `${timeGreeting}, ${analysis.extractedName}! What a pleasure to welcome you into my Kedah atelier. I will remember your name throughout our conversation. Tell me, what draws your curiosity first—the cultural story of why Wau Kangkang is shaped with wide-splayed legs over the paddy fields, or the traditional Tukang Wau secrets of curing bamboo and tuning the singing busur bow?`,
@@ -119,8 +277,50 @@ export function runExpertInference(
       ? `Pleasure to meet you, ${analysis.extractedName}! `
       : '';
 
+  if (combinedIntroChoice === 'former') {
+    const nodeIds = ['wau_kangkang', 'kedah_heritage', 'harvest_culture', 'kangkang_stance'];
+    return {
+      replyText: `${nameAckNote}Gladly, ${politeName}! Let us begin with the cultural story and iconic shape of Kedah’s **Wau Kangkang**.\n\nAcross Kedah—Malaysia’s historic *Jelapang Padi* (Rice Bowl)—farmers celebrate the close of the rice harvest (*musim menuai*) when steady, dry *Angin Timur* east monsoon winds glide over the open *bendang* fields of Kota Setar, Kubang Pasu, and Yan. Launching kites together in *gotong-royong* spirit marks thanksgiving after months in the fields. Its name comes from **kangkang** ("straddling" or "wide-legged"): below its broad wings and pinched waist, the frame opens into two outward-sweeping legs (*kaki terkangkang*) that act like twin vertical stabilizers in shifting paddy breezes while giving the kite a proud, grounded folk stance. Would you like to hear how villagers cure *buluh duri* bamboo for those legs, or how the *busur* bow is tuned to sing aloft?`,
+      activeNodeIds: nodeIds,
+      activeEdgeIds: getEdgesBetween(nodeIds),
+      ruleFired: 'RULE_SEMANTIC_ORIGIN_AND_SILHOUETTE',
+      matchedDiagnosis: null,
+      analysis,
+      updatedUserName: resolvedName,
+      stillAwaitingName: false,
+    };
+  }
+
+  if (combinedIntroChoice === 'latter') {
+    const nodeIds = ['wau_kangkang', 'buluh_duri', 'sayap_frame', 'busur_bow'];
+    return {
+      replyText: `${nameAckNote}With pleasure, ${politeName}! Let us step straight into the *Tukang Wau* craft secrets of bamboo curing and the singing **busur** bow.\n\nFirst, artisans harvest mature **Buluh Duri** for the rigid central spine and suppler **Buluh Betong** for the arched wings and splayed legs, then submerge the bamboo in muddy pond water (*merendam*) for 1 to 2 weeks to leach out natural sugars so boring beetles (*bubuk*) cannot weaken the frame. Once shaved with a *pisau raut* to fingertip balance, a slender bamboo bow carrying a scraped strip of cured **daun ibus** palm frond is lashed behind the neck—vibrating smoothly in the *Angin Timur* breeze to produce Wau Kangkang’s resonant drone (*dengung*). Curious how *sobek* floral paper is carved onto the frame next, or how the *teraju* bridle tunes its climb?`,
+      activeNodeIds: nodeIds,
+      activeEdgeIds: getEdgesBetween(nodeIds),
+      ruleFired: 'RULE_SEMANTIC_BAMBOO_AND_BUSUR',
+      matchedDiagnosis: null,
+      analysis,
+      updatedUserName: resolvedName,
+      stillAwaitingName: false,
+    };
+  }
+
+  if (combinedIntroChoice === 'both') {
+    const nodeIds = ['wau_kangkang', 'kedah_heritage', 'harvest_culture', 'kangkang_stance', 'buluh_duri', 'busur_bow'];
+    return {
+      replyText: `${nameAckNote}Wonderful enthusiasm, ${politeName}! Let us weave both the cultural story and the workshop craft together.\n\nIn Kedah’s *Jelapang Padi* plains, **Wau Kangkang** rises after the rice harvest (*musim menuai*) on steady *Angin Timur* breezes as a joyful *gotong-royong* thanksgiving, taking its name from its two wide-splayed (*terkangkang*) lower legs that stabilize yaw over open paddy fields. To endure those winds, *Tukang Wau* artisans soak mature **Buluh Duri** and **Buluh Betong** in muddy pond water for up to two weeks to prevent beetle rot, balance the frame on a single fingertip, and mount a tuned **daun ibus** ribbon on the **busur** bow so the kite sings overhead. Which craft detail shall we zoom in on next—carving *sobek* floral motifs or tying the *teraju* bridle?`,
+      activeNodeIds: nodeIds,
+      activeEdgeIds: getEdgesBetween(nodeIds),
+      ruleFired: 'RULE_SEMANTIC_COMPLETE_OVERVIEW',
+      matchedDiagnosis: null,
+      analysis,
+      updatedUserName: resolvedName,
+      stillAwaitingName: false,
+    };
+  }
+
   // Route by semantic intent
-  switch (analysis.detectedIntent) {
+  switch (effectiveIntent) {
     case 'greeting': {
       const timeGreeting = getTimeGreeting(now);
       const reply = resolvedName

@@ -71,3 +71,51 @@ test('diagnostic rule fires for kite flight issues and remembers user name', () 
   assert.ok(res.replyText.includes('Aiman'));
   assert.ok(res.activeNodeIds.includes('sayap_frame'));
 });
+
+test('contextual follow-ups like "the former" and "the first one" resolve to the offered Wau Kangkang topic', () => {
+  const intro = runExpertInference('Aiman', null, true, new Date('2026-11-15T10:30:00'));
+  const formerRes = runExpertInference(
+    'the former',
+    'Aiman',
+    false,
+    new Date('2026-11-15T10:31:00'),
+    { ruleFired: intro.ruleFired, text: intro.replyText },
+  );
+  assert.notEqual(formerRes.analysis.detectedIntent, 'off_topic');
+  assert.equal(formerRes.ruleFired, 'RULE_SEMANTIC_ORIGIN_AND_SILHOUETTE');
+  assert.ok(formerRes.replyText.includes('kangkang'));
+  assert.ok(formerRes.replyText.includes('Jelapang Padi'));
+
+  const firstOneRes = runExpertInference(
+    'tell me about the first one you mentioned',
+    'Aiman',
+    false,
+    new Date('2026-11-15T10:31:00'),
+    { ruleFired: intro.ruleFired, text: intro.replyText },
+  );
+  assert.notEqual(firstOneRes.analysis.detectedIntent, 'off_topic');
+  assert.equal(firstOneRes.ruleFired, 'RULE_SEMANTIC_ORIGIN_AND_SILHOUETTE');
+
+  const latterRes = runExpertInference(
+    'the latter',
+    'Aiman',
+    false,
+    new Date('2026-11-15T10:31:00'),
+    { ruleFired: intro.ruleFired, text: intro.replyText },
+  );
+  assert.equal(latterRes.analysis.detectedIntent, 'craft_bamboo');
+  assert.equal(latterRes.ruleFired, 'RULE_SEMANTIC_BAMBOO_AND_BUSUR');
+
+  // Dynamic Gemini-style dual-option question resolution
+  const dynamicFormer = runExpertInference(
+    'the former',
+    'Aiman',
+    false,
+    new Date('2026-11-15T10:32:00'),
+    {
+      ruleFired: 'RULE_SEMANTIC_BUSUR_ACOUSTICS',
+      text: 'Would you like to examine how sobek floral motifs are carved, or how to fix a kite that spins in the wind?',
+    },
+  );
+  assert.equal(dynamicFormer.analysis.detectedIntent, 'sobek_decoration');
+});

@@ -99,7 +99,16 @@ export default function App() {
         timestamp: formatClock(now),
       };
 
-      const inference = runExpertInference(rawText, userName, awaitingName, now);
+      const lastBotMessage = [...messages].reverse().find((m) => m.sender === 'bot');
+      const inference = runExpertInference(
+        rawText,
+        userName,
+        awaitingName,
+        now,
+        lastBotMessage
+          ? { ruleFired: lastBotMessage.ruleFired, text: lastBotMessage.text }
+          : undefined,
+      );
 
       // Update remembered visitor name
       if (inference.updatedUserName && inference.updatedUserName !== userName) {

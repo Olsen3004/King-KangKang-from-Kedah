@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { BookOpen, ChevronDown, ChevronUp, Feather, Send } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronUp, Send } from 'lucide-react';
 import { ChatMessage } from '../types/chat';
 import { FormattedProse } from './FormattedProse';
+import { KingKangKangAvatar } from './KingKangKangAvatar';
 
-const AVATAR_PATH = '/src/assets/images/king_kangkang_avatar_1794768856165.jpg';
 const HERO_PATH = '/src/assets/images/wau_kangkang_hero_1794768856663.jpg';
 
 interface ChatPanelProps {
@@ -51,7 +51,6 @@ export function ChatPanel({
   const [inputValue, setInputValue] = useState('');
   const [inputError, setInputError] = useState<string | null>(null);
   const [showTopicMenu, setShowTopicMenu] = useState(false);
-  const [avatarFailed, setAvatarFailed] = useState(false);
   const [heroFailed, setHeroFailed] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -87,20 +86,8 @@ export function ChatPanel({
       <div className="border-b border-[#E2D9C8] bg-[#F7F3EA] px-5 py-4">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3.5">
-            <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[#D6CEBE] bg-[#EBE4D5]">
-              {!avatarFailed ? (
-                <img
-                  src={AVATAR_PATH}
-                  alt="King KangKang, Royal Kedah Kite Artisan Avatar"
-                  referrerPolicy="no-referrer"
-                  onError={() => setAvatarFailed(true)}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-[#115E59] text-white">
-                  <Feather className="h-6 w-6" aria-hidden="true" />
-                </div>
-              )}
+            <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-[#D6CEBE] bg-[#E0F2FE] shadow-sm">
+              <KingKangKangAvatar label="King KangKang, Royal Wau Kangkang Avatar with Crown" />
             </div>
 
             <div className="min-w-0">
@@ -208,19 +195,8 @@ export function ChatPanel({
 
           return (
             <div key={msg.id} className="flex items-start gap-3">
-              <div className="mt-0.5 h-9 w-9 shrink-0 overflow-hidden rounded-full border border-[#D6CEBE] bg-[#F2ECE0]">
-                {!avatarFailed ? (
-                  <img
-                    src={AVATAR_PATH}
-                    alt="King KangKang"
-                    referrerPolicy="no-referrer"
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-[#B45309] text-white">
-                    <Feather className="h-4 w-4" aria-hidden="true" />
-                  </div>
-                )}
+              <div className="mt-0.5 h-10 w-10 shrink-0 overflow-hidden rounded-full border border-[#D6CEBE] bg-[#E0F2FE]">
+                <KingKangKangAvatar />
               </div>
 
               <div className="max-w-[86%] space-y-2 rounded-2xl rounded-tl-sm border border-[#E7E0D3] bg-[#FAF7F0] px-4 py-3.5">
@@ -245,15 +221,8 @@ export function ChatPanel({
 
         {isSending && (
           <div className="flex items-center gap-3 text-xs text-[#57534E]">
-            <div className="h-8 w-8 overflow-hidden rounded-full border border-[#D6CEBE] bg-[#F2ECE0]">
-              {!avatarFailed && (
-                <img
-                  src={AVATAR_PATH}
-                  alt="King KangKang"
-                  referrerPolicy="no-referrer"
-                  className="h-full w-full object-cover"
-                />
-              )}
+            <div className="h-8 w-8 overflow-hidden rounded-full border border-[#D6CEBE] bg-[#E0F2FE]">
+              <KingKangKangAvatar />
             </div>
             <span>King KangKang is consulting the workshop records...</span>
           </div>

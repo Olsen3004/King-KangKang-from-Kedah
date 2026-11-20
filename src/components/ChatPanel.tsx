@@ -97,7 +97,7 @@ export function ChatPanel({
               <p className="mt-0.5 text-xs text-[#57534E]">
                 <span>{timeGreeting}</span>
                 <span aria-hidden="true" className="mx-1.5">·</span>
-                <span>Kedah Wau Kangkang Expert</span>
+                <span>Wau King of Kedah</span>
                 <span aria-hidden="true" className="mx-1.5">·</span>
                 <span data-testid="visitor-name-label" className="font-medium text-[#115E59]">
                   {userName ? `Visitor: ${userName}` : 'Visitor: Guest'}
@@ -224,7 +224,7 @@ export function ChatPanel({
             <div className="h-8 w-8 overflow-hidden rounded-full border border-[#D6CEBE] bg-[#E0F2FE]">
               <KingKangKangAvatar />
             </div>
-            <span>King KangKang is consulting the workshop records...</span>
+            <span>King KangKang is riding the Kedah breeze...</span>
           </div>
         )}
         <div ref={bottomRef} />

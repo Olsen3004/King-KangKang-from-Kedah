@@ -256,7 +256,7 @@ export default function App() {
                 : 'text-[#57534E]'
             }`}
           >
-            Atelier Chat
+            Royal Chat
           </button>
           <button
             type="button"

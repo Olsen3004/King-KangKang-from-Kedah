@@ -19,6 +19,7 @@ test('createInitialGreetingMessage starts conversation first with time greeting'
 
   assert.ok(msg.text.startsWith('Good morning!'));
   assert.ok(msg.text.includes('King KangKang'));
+  assert.ok(msg.text.includes('Wau King'));
   assert.equal(msg.awaitingName, true);
   assert.ok(msg.activeNodeIds.includes('wau_kangkang'));
 });
